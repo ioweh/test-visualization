@@ -1,0 +1,31 @@
+@import "../constants.less";
+
+.footer {
+  display: flex;
+  height: 30px;
+  text-align: center;
+
+  &__info {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+    &__color {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+
+      &--client {
+        background-color: @client;
+      }
+      &--server {
+        background-color: @server;
+      }
+      &--database {
+        background-color: @database;
+      }
+    }
+  }
+}

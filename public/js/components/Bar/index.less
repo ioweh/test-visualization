@@ -1,0 +1,38 @@
+@import "../constants.less";
+
+.bar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    width: 50px;
+    border-radius: 5px;
+    overflow: hidden;
+
+    &__section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    & div:nth-child(1) {
+      background-color: @client;
+    }
+    & div:nth-child(2) {
+      background-color: @server;
+    }
+    & div:nth-child(3) {
+      background-color: @database;
+    }
+  }
+
+  &__label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
