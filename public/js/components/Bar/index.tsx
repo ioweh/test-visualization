@@ -7,8 +7,15 @@ const Bar = (
   { heights, label, isStandard, containerHeight, maxBarHeight },
   ref,
 ): JSX.Element => {
+  const tooltip = `Клиент: ${heights[0]} Сервер: ${heights[1]} БД: ${heights[2]}`;
+  const standardBarTooltip = `Норматив: ${heights[0]}`;
+
   return (
-    <div className="bar" ref={ref}>
+    <div
+      className="bar"
+      title={isStandard ? standardBarTooltip : tooltip}
+      ref={ref}
+    >
       <div
         className={`bar__content ${isStandard ? "bar__content--standard" : ""}`}
       >
