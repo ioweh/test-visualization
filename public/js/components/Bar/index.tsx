@@ -1,8 +1,14 @@
 import * as React from "react";
 
 import "./index.less";
+import { BAR_ARROW_OFFSET } from "../constants";
 
-const Bar = ({ heights, label, isStandard }, ref): JSX.Element => {
+const Bar = (
+  { heights, label, isStandard, containerHeight, maxBarHeight },
+  ref,
+): JSX.Element => {
+  const totalBarHeight = heights.reduce((acc, x) => acc + x, 0);
+
   return (
     <div className="bar" ref={ref}>
       <div
@@ -13,7 +19,7 @@ const Bar = ({ heights, label, isStandard }, ref): JSX.Element => {
             key={index}
             className="bar__content__section"
             style={{
-              height: `${height}px`,
+              height: `${height * ((containerHeight - BAR_ARROW_OFFSET * 2) / maxBarHeight)}px`,
             }}
           >
             <span

@@ -54,9 +54,20 @@ const TestsPassed = (): JSX.Element => {
 
   const servers = ["1", "2", "3", "4", "5"];
 
+  const containerRef = React.useRef(null);
+  const [containerHeight, setContainerHeight] = React.useState(0);
+
   const sum = (arr: number[]): number => {
     return arr.reduce((partialSum, a) => partialSum + a, 0);
   };
+
+  const maxNumberOfTests = () =>
+    Math.max(
+      sum(Object.values(serverStats.dev)),
+      sum(Object.values(serverStats.test)),
+      sum(Object.values(serverStats.prod)),
+      serverStats.norm,
+    );
 
   const testDevDiff = () => {
     return (
@@ -95,9 +106,10 @@ const TestsPassed = (): JSX.Element => {
       });
     }
     if (devRect && testRect && prodRect) {
-      setMaxBarHeight(
-        Math.min(devRect.y, testRect.y, prodRect.y) - BAR_ARROW_OFFSET,
-      );
+      setMaxBarHeight(Math.min(devRect.y, testRect.y, prodRect.y));
+    }
+    if (containerRef.current) {
+      setContainerHeight(containerRef.current.getBoundingClientRect().height);
     }
   };
 
@@ -150,7 +162,7 @@ const TestsPassed = (): JSX.Element => {
             </select>
           </div>
         </div>
-        <div className="tests-container__content">
+        <div className="tests-container__content" ref={containerRef}>
           {loading && <h1>Loading...</h1>}
 
           {error && <h1>{error}</h1>}
@@ -162,6 +174,8 @@ const TestsPassed = (): JSX.Element => {
                 label="dev"
                 ref={devRef}
                 isStandard={false}
+                containerHeight={containerHeight}
+                maxBarHeight={maxNumberOfTests()}
               />
               <Arrow
                 start={devBarPosition}
@@ -169,7 +183,7 @@ const TestsPassed = (): JSX.Element => {
                   ...testBarPosition,
                   x: testBarPosition.x - ARROW_X_OFFSET,
                 }}
-                height={maxBarHeight}
+                height={maxBarHeight - BAR_ARROW_OFFSET}
                 diff={testDevDiff()}
               />
               <Bar
@@ -177,6 +191,8 @@ const TestsPassed = (): JSX.Element => {
                 label="test"
                 ref={testRef}
                 isStandard={false}
+                containerHeight={containerHeight}
+                maxBarHeight={maxNumberOfTests()}
               />
               <Arrow
                 start={{
@@ -184,7 +200,7 @@ const TestsPassed = (): JSX.Element => {
                   x: testBarPosition.x + ARROW_X_OFFSET,
                 }}
                 finish={prodBarPosition}
-                height={maxBarHeight}
+                height={maxBarHeight - BAR_ARROW_OFFSET}
                 diff={prodTestDiff()}
               />
               <Bar
@@ -192,11 +208,15 @@ const TestsPassed = (): JSX.Element => {
                 label="prod"
                 ref={prodRef}
                 isStandard={false}
+                containerHeight={containerHeight}
+                maxBarHeight={maxNumberOfTests()}
               />
               <Bar
                 heights={[serverStats.norm]}
                 label="норматив"
                 isStandard={true}
+                containerHeight={containerHeight}
+                maxBarHeight={maxNumberOfTests()}
               />
             </>
           )}
