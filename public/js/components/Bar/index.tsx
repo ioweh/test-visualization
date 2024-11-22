@@ -7,8 +7,6 @@ const Bar = (
   { heights, label, isStandard, containerHeight, maxBarHeight },
   ref,
 ): JSX.Element => {
-  const totalBarHeight = heights.reduce((acc, x) => acc + x, 0);
-
   return (
     <div className="bar" ref={ref}>
       <div
@@ -19,7 +17,7 @@ const Bar = (
             key={index}
             className="bar__content__section"
             style={{
-              height: `${height * ((containerHeight - BAR_ARROW_OFFSET * 2) / maxBarHeight)}px`,
+              height: `${height ? height * ((containerHeight - BAR_ARROW_OFFSET * 2) / maxBarHeight) : 0}px`,
             }}
           >
             <span
