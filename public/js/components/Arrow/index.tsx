@@ -2,6 +2,15 @@ import * as React from "react";
 import "./index.less";
 
 const Arrow = ({ start, finish, height, diff }) => {
+  const labelRef = React.useRef(null);
+  const [labelWidth, setLabelWidth] = React.useState(0);
+
+  React.useEffect(() => {
+    if (labelRef.current) {
+      setLabelWidth(labelRef.current.offsetWidth);
+    }
+  }, []);
+
   return (
     <>
       <svg className="arrow">
@@ -18,17 +27,20 @@ const Arrow = ({ start, finish, height, diff }) => {
       </svg>
       <div
         className={`label ${diff < 0 ? "label--decrease" : "label--increase"}`}
+        ref={labelRef}
         style={{
           top: `${height - 10}px`,
-          left: `${start.x + (finish.x - start.x) / 2 - 20}px`,
-          width: "40px",
+          left: `${start.x + (finish.x - start.x) / 2 - labelWidth / 2}px`,
+          width: "auto",
           height: "20px",
         }}
       >
         {diff > 0 && <img src="/static/up-arrow.svg" />}
         {diff < 0 && <img src="/static/down-arrow.svg" />}
-        {diff > 0 && <span>+</span>}
-        {diff}
+        <div className="label__text">
+          {diff > 0 && <span>+</span>}
+          {diff}
+        </div>
       </div>
     </>
   );
