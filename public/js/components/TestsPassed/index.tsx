@@ -140,7 +140,7 @@ const TestsPassed = (): JSX.Element => {
           {serverStats && (
             <span>Количество пройденных тестов "{serverStats.title}"</span>
           )}
-          <div>
+          <div className="tests-container__header--last">
             <select onChange={handleServerChange} value={selectedServer}>
               {servers.map((server, index) => (
                 <option key={index} value={server}>
