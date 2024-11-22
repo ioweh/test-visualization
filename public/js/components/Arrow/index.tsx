@@ -26,7 +26,7 @@ const Arrow = ({ start, finish, height, diff }) => {
         />
       </svg>
       <div
-        className={`label ${diff < 0 ? "label--decrease" : "label--increase"}`}
+        className={`label ${diff === 0 ? "label--equal" : diff < 0 ? "label--decrease" : "label--increase"}`}
         ref={labelRef}
         style={{
           top: `${height - 10}px`,
