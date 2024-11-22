@@ -71,6 +71,36 @@ const TestsPassed = (): JSX.Element => {
     );
   };
 
+  const updatePositions = () => {
+    const devRect = devRef.current?.getBoundingClientRect();
+    const testRect = testRef.current?.getBoundingClientRect();
+    const prodRect = prodRef.current?.getBoundingClientRect();
+
+    if (devRect) {
+      setDevBarPosition({
+        x: devRect.x + devRect.width / 2,
+        y: devRect.y - ARROW_Y_OFFSET,
+      });
+    }
+    if (testRect) {
+      setTestBarPosition({
+        x: testRect.x + testRect.width / 2,
+        y: testRect.y - ARROW_Y_OFFSET,
+      });
+    }
+    if (prodRect) {
+      setProdBarPosition({
+        x: prodRect.x + prodRect.width / 2,
+        y: prodRect.y - ARROW_Y_OFFSET,
+      });
+    }
+    if (devRect && testRect && prodRect) {
+      setMaxBarHeight(
+        Math.min(devRect.y, testRect.y, prodRect.y) - BAR_ARROW_OFFSET,
+      );
+    }
+  };
+
   React.useEffect(() => {
     if (selectedServer) {
       setLoading(true);
@@ -85,6 +115,9 @@ const TestsPassed = (): JSX.Element => {
           setError("Failed to fetch data");
         } finally {
           setLoading(false);
+          const resizeEvent = new Event("resize");
+
+          window.dispatchEvent(resizeEvent);
         }
       };
 
@@ -93,36 +126,6 @@ const TestsPassed = (): JSX.Element => {
   }, [selectedServer]);
 
   React.useEffect(() => {
-    const updatePositions = () => {
-      const devRect = devRef.current?.getBoundingClientRect();
-      const testRect = testRef.current?.getBoundingClientRect();
-      const prodRect = prodRef.current?.getBoundingClientRect();
-
-      if (devRect) {
-        setDevBarPosition({
-          x: devRect.x + devRect.width / 2,
-          y: devRect.y - ARROW_Y_OFFSET,
-        });
-      }
-      if (testRect) {
-        setTestBarPosition({
-          x: testRect.x + testRect.width / 2,
-          y: testRect.y - ARROW_Y_OFFSET,
-        });
-      }
-      if (prodRect) {
-        setProdBarPosition({
-          x: prodRect.x + prodRect.width / 2,
-          y: prodRect.y - ARROW_Y_OFFSET,
-        });
-      }
-      if (devRect && testRect && prodRect) {
-        setMaxBarHeight(
-          Math.min(devRect.y, testRect.y, prodRect.y) - BAR_ARROW_OFFSET,
-        );
-      }
-    };
-
     updatePositions();
 
     window.addEventListener("resize", updatePositions);
