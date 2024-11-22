@@ -5,7 +5,12 @@ import Arrow from "../Arrow";
 import Footer from "../Footer";
 
 import "./index.less";
-import { API_URL } from "../constants.js";
+import {
+  API_URL,
+  ARROW_X_OFFSET,
+  ARROW_Y_OFFSET,
+  BAR_ARROW_OFFSET,
+} from "../constants.js";
 
 interface EnvironmentStats {
   front: number;
@@ -29,15 +34,16 @@ const TestsPassed = (): JSX.Element => {
   const devRef = React.useRef(null);
   const testRef = React.useRef(null);
   const prodRef = React.useRef(null);
-  const [devPositions, setDevPositions] = React.useState({
+  const [maxBarHeight, setMaxBarHeight] = React.useState(0);
+  const [devBarPosition, setDevBarPosition] = React.useState({
     x: 0,
     y: 0,
   });
-  const [testPositions, setTestPositions] = React.useState({
+  const [testBarPosition, setTestBarPosition] = React.useState({
     x: 0,
     y: 0,
   });
-  const [prodPositions, setProdPositions] = React.useState({
+  const [prodBarPosition, setProdBarPosition] = React.useState({
     x: 0,
     y: 0,
   });
@@ -47,6 +53,23 @@ const TestsPassed = (): JSX.Element => {
   };
 
   const servers = ["1", "2", "3", "4", "5"];
+
+  const sum = (arr: number[]): number => {
+    return arr.reduce((partialSum, a) => partialSum + a, 0);
+  };
+
+  const testDevDiff = () => {
+    return (
+      sum(Object.values(serverStats.test)) - sum(Object.values(serverStats.dev))
+    );
+  };
+
+  const prodTestDiff = () => {
+    return (
+      sum(Object.values(serverStats.prod)) -
+      sum(Object.values(serverStats.test))
+    );
+  };
 
   React.useEffect(() => {
     if (selectedServer) {
@@ -76,22 +99,27 @@ const TestsPassed = (): JSX.Element => {
       const prodRect = prodRef.current?.getBoundingClientRect();
 
       if (devRect) {
-        setDevPositions({
+        setDevBarPosition({
           x: devRect.x + devRect.width / 2,
-          y: devRect.y - 10,
+          y: devRect.y - ARROW_Y_OFFSET,
         });
       }
       if (testRect) {
-        setTestPositions({
+        setTestBarPosition({
           x: testRect.x + testRect.width / 2,
-          y: testRect.y - 10,
+          y: testRect.y - ARROW_Y_OFFSET,
         });
       }
       if (prodRect) {
-        setProdPositions({
+        setProdBarPosition({
           x: prodRect.x + prodRect.width / 2,
-          y: prodRect.y - 10,
+          y: prodRect.y - ARROW_Y_OFFSET,
         });
+      }
+      if (devRect && testRect && prodRect) {
+        setMaxBarHeight(
+          Math.min(devRect.y, testRect.y, prodRect.y) - BAR_ARROW_OFFSET,
+        );
       }
     };
 
@@ -132,8 +160,13 @@ const TestsPassed = (): JSX.Element => {
                 ref={devRef}
               />
               <Arrow
-                start={devPositions}
-                finish={{ ...testPositions, x: testPositions.x - 10 }}
+                start={devBarPosition}
+                finish={{
+                  ...testBarPosition,
+                  x: testBarPosition.x - ARROW_X_OFFSET,
+                }}
+                height={maxBarHeight}
+                diff={testDevDiff()}
               />
               <Bar
                 heights={Object.values(serverStats.test)}
@@ -141,8 +174,13 @@ const TestsPassed = (): JSX.Element => {
                 ref={testRef}
               />
               <Arrow
-                start={{ ...testPositions, x: testPositions.x + 10 }}
-                finish={prodPositions}
+                start={{
+                  ...testBarPosition,
+                  x: testBarPosition.x + ARROW_X_OFFSET,
+                }}
+                finish={prodBarPosition}
+                height={maxBarHeight}
+                diff={prodTestDiff()}
               />
               <Bar
                 heights={Object.values(serverStats.prod)}
