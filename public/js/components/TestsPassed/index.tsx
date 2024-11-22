@@ -158,6 +158,7 @@ const TestsPassed = (): JSX.Element => {
                 heights={Object.values(serverStats.dev)}
                 label="dev"
                 ref={devRef}
+                isStandard={false}
               />
               <Arrow
                 start={devBarPosition}
@@ -172,6 +173,7 @@ const TestsPassed = (): JSX.Element => {
                 heights={Object.values(serverStats.test)}
                 label="test"
                 ref={testRef}
+                isStandard={false}
               />
               <Arrow
                 start={{
@@ -186,6 +188,12 @@ const TestsPassed = (): JSX.Element => {
                 heights={Object.values(serverStats.prod)}
                 label="prod"
                 ref={prodRef}
+                isStandard={false}
+              />
+              <Bar
+                heights={[serverStats.norm]}
+                label="норматив"
+                isStandard={true}
               />
             </>
           )}
