@@ -41,8 +41,8 @@ jobs:
         env:
           PASSWORD: ${{ secrets.SERVER_PASSWORD }}
         run: |
-          sshpass -p "$PASSWORD" rsync -avz --progress public/index.html root@5.44.46.70:/var/www/html/test-visualization/
-          sshpass -p "$PASSWORD" rsync -avz --progress public/js/build/bundle.js root@5.44.46.70:/var/www/html/test-visualization/js/build/
-          sshpass -p "$PASSWORD" rsync -avz --progress public/js/build/bundle.js.LICENSE.txt root@5.44.46.70:/var/www/html/test-visualization/js/build/
-          sshpass -p "$PASSWORD" rsync -avz --progress public/static/down-arrow.svg root@5.44.46.70:/var/www/html/test-visualization/static/
-          sshpass -p "$PASSWORD" rsync -avz --progress public/static/up-arrow.svg root@5.44.46.70:/var/www/html/test-visualization/static/
+          sshpass -p "$PASSWORD" rsync -avz -e "ssh -o StrictHostKeyChecking=no" --progress public/index.html root@5.44.46.70:/var/www/html/test-visualization/
+          sshpass -p "$PASSWORD" rsync -avz -e "ssh -o StrictHostKeyChecking=no" --progress public/js/build/bundle.js root@5.44.46.70:/var/www/html/test-visualization/js/build/
+          sshpass -p "$PASSWORD" rsync -avz -e "ssh -o StrictHostKeyChecking=no" --progress public/js/build/bundle.js.LICENSE.txt root@5.44.46.70:/var/www/html/test-visualization/js/build/
+          sshpass -p "$PASSWORD" rsync -avz -e "ssh -o StrictHostKeyChecking=no" --progress public/static/down-arrow.svg root@5.44.46.70:/var/www/html/test-visualization/static/
+          sshpass -p "$PASSWORD" rsync -avz -e "ssh -o StrictHostKeyChecking=no" --progress public/static/up-arrow.svg root@5.44.46.70:/var/www/html/test-visualization/static/
