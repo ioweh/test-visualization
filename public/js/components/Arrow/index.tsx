@@ -35,8 +35,8 @@ const Arrow = ({ start, finish, height, diff }) => {
           height: "20px",
         }}
       >
-        {diff > 0 && <img src="/static/up-arrow.svg" />}
-        {diff < 0 && <img src="/static/down-arrow.svg" />}
+        {diff > 0 && <img src="static/up-arrow.svg" />}
+        {diff < 0 && <img src="static/down-arrow.svg" />}
         <div className="label__text">
           {diff > 0 && <span>+</span>}
           {diff}
